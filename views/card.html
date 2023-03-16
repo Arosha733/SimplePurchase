@@ -1,0 +1,1239 @@
+{{extend './head.html'}}
+{{block 'content'}}
+<div class="float-box">
+    <div class="confirm-box">
+        <h4 class="confirm-title">
+            <span></span>
+            <i class="close-btn">
+                <span class="line-left"></span>
+                <span class="line-right"></span>
+            </i>
+        </h4>
+        <div class="confirm-content">
+            Please select the action you want to delete?
+        </div>
+        <div class="confirm-btn">
+            <a href="javascript:;" class="delete">delete</a>
+            <a href="javascript:;" class="cancel">cancel</a>
+        </div>
+    </div>
+</div>
+<div class="header">
+    <div class="header-center">
+    </div>
+</div>
+<!-- <div class="mz-foot"></div> -->
+{{/block}}
+{{block 'contentcss'}}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        text-align: none;
+        font-size: 16px;
+        color: #212529;
+        font-family: "微软雅黑";
+        text-decoration: none;
+        font-weight: normal;
+        outline: none;
+    }
+
+    body,
+    div,
+    dl,
+    dt,
+    dd,
+    ul,
+    ol,
+    li,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    pre,
+    code,
+    form,
+    fieldset,
+    legend,
+    input,
+    button,
+    textarea,
+    p,
+    blockquote,
+    th,
+    td {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    img {
+        border: none
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    ul,
+    ol {
+        list-style: none;
+    }
+
+    i,
+    em,
+    strong,
+    b,
+    u {
+        font-style: normal;
+    }
+
+    button,
+    input,
+    textarea {
+        outline: none;
+        border: none;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    .clearfix::after,
+    .clearfix::before {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    html,
+    body {
+        width: 100%;
+        min-width: 77rem;
+        /*1232px*/
+        max-width: 140rem;
+        /*2240px*/
+        margin: 0 auto;
+    }
+
+    body {
+        font-family: Helvetica;
+        font-size: 16px;
+        background-color: #F4F6FA;
+        font-weight: 400;
+    }
+
+    /*顶部区域*/
+    div.header {
+        background-color: #fff;
+        filter: drop-shadow(0px 3px 3px #eee);
+    }
+
+    div.header>div.header-center {
+        width: 77rem;
+        height: 5rem;
+        margin: 0 auto;
+    }
+
+    /*购物车容器*/
+    div.mzContainer {
+        margin-bottom: 2.5rem;
+    }
+
+    div.check-container {
+        width: 77rem;
+        margin: 0.6rem auto;
+    }
+
+    .input {
+        height: 30px;
+        width: 60px;
+        margin-top: 0px;
+        border: none;
+        line-height: inherit;
+        text-align: center;
+        float: left;
+    }
+
+    div.shop-cart-nav table {
+        width: 77rem;
+        height: 3rem;
+    }
+
+    div.shop-cart-nav table tr {
+        border-bottom: 0.09rem solid #eee;
+        background-color: #fff;
+    }
+
+    div.shop-cart-nav table tr td:not(:first-of-type) {
+        color: #ccc;
+        font-size: 0.8rem;
+        text-align: center;
+    }
+
+    /*购物车头部导航*/
+    div.shop-cart-nav table tr td.check-area {
+        width: 33rem;
+    }
+
+    div.shop-cart-nav table tr td.singal-price {
+        width: 11rem;
+    }
+
+    div.shop-cart-nav table tr td.volumes {
+        width: 12rem;
+    }
+
+    div.shop-cart-nav table tr td.small-total {
+        width: 12rem;
+    }
+
+    div.shop-cart-nav table tr td.edit-area {
+        width: 11rem;
+        cursor: pointer;
+
+    }
+
+    td.edit-area>span {
+        color: #00c3f5;
+    }
+
+
+    /*checkbox区域*/
+    a.check-label {
+        margin-left: 1rem;
+        cursor: pointer;
+    }
+
+    a.check-label i.checkbox {
+        position: relative;
+        display: inline-block;
+        width: 1.3rem;
+        height: 1.3rem;
+        border: 1px solid #bbb;
+        background-color: #fff;
+        vertical-align: middle;
+    }
+
+    a.check-label.checked i.checkbox {
+        background-color: #00c3f5;
+    }
+
+    a.check-label i.checkbox>span.check-mark {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: .8rem;
+        height: .4rem;
+        border-left: 0.15rem solid #fff;
+        border-bottom: 0.15rem solid #fff;
+        transform: translate(-50%, -70%) rotate(-45deg);
+    }
+
+    a.check-label em.check-name {
+        margin-left: 0.5rem;
+        vertical-align: middle;
+        font-size: 0.95rem;
+        color: #333;
+    }
+
+
+
+    ul.goods-ul>li.goods-list>table {
+        width: 100%;
+    }
+
+    ul.goods-ul>li.goods-list:not(:first-of-type) {
+        margin-top: 0.5rem;
+    }
+
+    /*手办种类头部*/
+    table.goods-header {
+        height: 3rem;
+    }
+
+    table.goods-header tr {
+        border-bottom: 0.09rem solid #eee;
+        background-color: #FAFAFC;
+    }
+
+    /*手办内容*/
+    table.goods-body tr {
+        height: 9rem;
+        background-color: #fff;
+    }
+
+    table.goods-body tr:not(:first-of-type) {
+        border-top: 0.08rem dashed #ddd;
+    }
+
+    table.goods-body tr td:not(:first-of-type) {
+        text-align: center;
+    }
+
+
+    table.goods-body tr td.goods-col-select {
+
+        width: 33rem;
+    }
+
+    a.goods-img {
+        display: inline-block;
+        width: 7rem;
+        height: 7rem;
+        margin-left: 1rem;
+        vertical-align: middle;
+    }
+
+    a.goods-img>img {
+        width: 100%;
+        height: 100%;
+    }
+
+    a.goods-info {
+        display: inline-block;
+        margin-left: 1rem;
+        vertical-align: middle;
+    }
+
+    a.goods-info h4.goods-info-title {
+        padding-bottom: .2rem;
+        font-size: 1rem;
+        color: #333;
+        font-weight: 500;
+    }
+
+    a.goods-info p.goods-info-tips {
+        font-size: .9rem;
+        color: #777;
+    }
+
+
+    table.goods-body tr td.goods-col-price {
+
+        width: 11rem;
+        font-size: 1.1rem;
+        color: #556;
+
+    }
+
+
+    table.goods-body tr td.goods-col-volumes {
+
+        width: 12rem;
+    }
+
+    td.goods-col-volumes div.num-ctrl-area {
+        display: inline-block;
+        position: relative;
+    }
+
+    td.goods-col-volumes div.num-ctrl-area button {
+        float: left;
+        width: 1.6rem;
+        height: 2rem;
+        border: 1px solid #eee;
+        line-height: 1.6rem;
+        font-size: 1.2rem;
+        color: #525252;
+        background-color: #fff;
+        transition: color ease .2s;
+        cursor: pointer;
+    }
+
+    td.goods-col-volumes div.num-ctrl-area button.forbid {
+        color: #999;
+        cursor: no-drop;
+    }
+
+    td.goods-col-volumes div.num-ctrl-area button:not(.forbid):hover {
+        color: #00c3f5;
+    }
+
+    td.goods-col-volumes div.num-ctrl-area input {
+        float: left;
+        height: 2rem;
+        width: 3rem;
+        border-bottom: 1px solid #eee;
+        border-top: 1px solid #eee;
+        text-align: center;
+    }
+
+    td.goods-col-volumes div.num-ctrl-area em.hint {
+        position: absolute;
+        top: calc(100% + .5rem);
+        left: 50%;
+        transform: translate(-50%);
+        width: 100%;
+        color: #888;
+        font-size: 0.9rem;
+    }
+
+    table.goods-body tr td.goods-col-total {
+
+        width: 12rem;
+        font-size: 1.1rem;
+        color: #E02B41;
+
+    }
+
+
+    table.goods-body tr td.goods-col-ctrl {
+
+        position: relative;
+        width: 11rem;
+        font-size: .82rem;
+        color: #626262;
+        font-weight: 400;
+    }
+
+    table.goods-body tr td.goods-col-ctrl i.del-product {
+
+        display: none;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 1.4rem;
+        height: 1.4rem;
+        border-radius: 50%;
+        background-color: #fff;
+        cursor: pointer;
+        transition: background-color cubic-bezier(0.175, 0.885, 0.32, 1.275) .5s;
+    }
+
+    table.goods-body tr td.goods-col-ctrl i.del-product>span {
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0.8rem;
+        height: 0.12rem;
+        background-color: #777;
+        transition: background-color cubic-bezier(0.175, 0.885, 0.32, 1.275) .5s;
+    }
+
+
+    table.goods-body tr td.goods-col-ctrl i.del-product>span.line-left {
+
+        transform: translate(-50%, -50%) rotate(45deg);
+
+    }
+
+    table.goods-body tr td.goods-col-ctrl i.del-product>span.line-right {
+
+        transform: translate(-50%, -50%) rotate(-45deg);
+
+    }
+
+    table.goods-body tr td.goods-col-ctrl i.del-product:hover {
+
+        background-color: #00c3f5;
+
+    }
+
+    table.goods-body tr td.goods-col-ctrl i.del-product:hover>span {
+
+        background-color: #fff;
+
+    }
+
+
+    /*底部信息总览和结算区域*/
+    div.shop-cart-footer.fixed {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        z-index: 9;
+        filter: drop-shadow(0px -4px 4px #eee);
+    }
+
+    div.shop-cart-footer div.cart-foot {
+
+        width: 77rem;
+        height: 4rem;
+        margin: auto;
+        background-color: #fff;
+
+    }
+
+    div.shop-cart-footer div.cart-foot>div.cart-foot-left {
+
+        float: left;
+        height: 100%;
+    }
+
+    div.shop-cart-footer div.cart-foot {
+        line-height: 4rem;
+    }
+
+    div.shop-cart-footer div.cart-foot>div.cart-foot-left em {
+        color: #888;
+        font-size: 0.9rem;
+    }
+
+    div.shop-cart-footer div.cart-foot>div.cart-foot-left em.goods-delete {
+
+        margin-left: 1rem;
+        cursor: pointer;
+        transition: color ease .2s;
+    }
+
+    div.shop-cart-footer div.cart-foot>div.cart-foot-left em.goods-delete:hover {
+        color: #00c3f5;
+    }
+
+    div.shop-cart-footer div.cart-foot>div.cart-foot-left em.goods-num {
+        margin-left: 1rem;
+    }
+
+    div.shop-cart-footer div.cart-foot>div.cart-foot-left em.goods-num>span.sum-selected {
+        color: #00c3f5;
+        font-size: 1.1rem;
+        vertical-align: middle;
+    }
+
+    div.shop-cart-footer div.cart-foot>div.cart-foot-right {
+        float: right;
+        height: 100%;
+        padding-right: 2rem;
+    }
+
+    div.shop-cart-footer div.cart-foot>div.cart-foot-right em.total-bill {
+        color: #566;
+        font-size: 0.9rem;
+        margin-right: 1rem;
+    }
+
+    div.shop-cart-footer div.cart-foot>div.cart-foot-right em.total-bill>span.bill-price {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #E02B41;
+        vertical-align: middle;
+    }
+
+    div.shop-cart-footer div.cart-foot>div.cart-foot-right a.order-btn {
+
+        display: inline-block;
+        height: 2rem;
+        width: 6rem;
+        text-align: center;
+        line-height: 2rem;
+        background-color: #F66567;
+        font-weight: 400;
+        font-size: .9rem;
+        color: #fff;
+        border-radius: 0.2rem;
+    }
+
+    div.shop-cart-footer div.cart-foot>div.cart-foot-right a.order-btn.banOrder {
+        background-color: #DBDBDB;
+        cursor: no-drop;
+    }
+
+
+    div.mz-foot {
+        margin: 0 auto;
+        background-color: #fff;
+        height: 20rem;
+    }
+
+
+    div.float-box {
+        display: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, .2);
+        z-index: 100;
+    }
+
+    div.float-box div.confirm-box {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 30rem;
+        border-radius: 0.3rem;
+        background-color: #feffff;
+    }
+
+    div.float-box div.confirm-box>h4.confirm-title {
+        position: relative;
+        padding: .8rem 0;
+        border-bottom: 0.05rem solid #dee;
+        text-align: center;
+        color: #444;
+        font-weight: 600;
+        font-size: 1.2rem;
+    }
+
+    div.float-box div.confirm-box>h4.confirm-title>i.close-btn {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1.6rem;
+        height: 1.6rem;
+        cursor: pointer;
+        transition: opacity ease .2s;
+    }
+
+    div.float-box div.confirm-box>h4.confirm-title>i.close-btn:hover {
+        opacity: .6;
+    }
+
+    div.float-box div.confirm-box>h4.confirm-title>i.close-btn>span {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 1.2rem;
+        height: 0.13rem;
+        background-color: #aaa;
+    }
+
+    div.float-box div.confirm-box>h4.confirm-title>i.close-btn>span.line-left {
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    div.float-box div.confirm-box>h4.confirm-title>i.close-btn>span.line-right {
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+
+    div.float-box div.confirm-box>div.confirm-content {
+        height: 8rem;
+        line-height: 8rem;
+        text-align: center;
+        color: #999;
+        font-size: 0.97rem;
+    }
+
+    div.float-box div.confirm-box>div.confirm-btn {
+        padding-bottom: 1.8rem;
+        text-align: center;
+    }
+
+    div.float-box div.confirm-box>div.confirm-btn>a {
+        display: inline-block;
+        width: 6.2rem;
+        height: 2.2rem;
+        line-height: 2.2rem;
+        font-size: 0.88rem;
+        border-radius: 0.2rem;
+        transition: opacity ease .3s;
+    }
+
+    div.float-box div.confirm-box>div.confirm-btn>a:hover {
+        opacity: .7;
+    }
+
+    div.float-box div.confirm-box>div.confirm-btn>a:not(:first-of-type) {
+        margin-left: 1rem;
+    }
+
+    div.float-box div.confirm-box>div.confirm-btn>a.delete {
+        background-color: #eee;
+        color: #777;
+    }
+
+    div.float-box div.confirm-box>div.confirm-btn>a.cancel {
+        background-color: #00c3f5;
+        color: #fff;
+    }
+</style>
+{{/block}}
+{{block 'contentjs'}}
+<script>
+    layui.use('layer', function () {
+        var $cartContainer = $('<div class="mzContainer">\
+                            <div class= "check-container" >\
+                                <div class="shop-cart-nav">\
+                                    <table>\
+                                        <tr>\
+                                            <td class="check-area">\
+                                                <a href="javascript:;" class="check-label check-all">\
+                                                    <i class="checkbox">\
+                                                        <span class="check-mark"></span>\
+                                                    </i>\
+                                                    <em class="check-name">Select All</em>\
+                                                </a>\
+                                            </td>\
+                                            <td class="singal-price">\
+                                                Unit price\
+                                            </td>\
+                                            <td class="volumes">\
+                                                number\
+                                            </td>\
+                                            <td class="small-total">\
+                                                Subtotal\
+                                            </td>\
+                                            <td class="edit-area">\
+                                                <span class="edit">edit</span>\
+                                            </td>\
+                                        </tr>\
+                                    </table>\
+                                </div>\
+                                <ul class="goods-ul">\
+                                </ul>\
+                            </div >\
+                            <div class="shop-cart-footer">\
+                                <div class="cart-foot clearfix">\
+                                    <div class="cart-foot-left">\
+                                        <a href="javascript:;" class="check-label check-all">\
+                                            <i class="checkbox">\
+                                                <span class="check-mark"></span>\
+                                            </i>\
+                                            <em class="check-name">Select All</em>\
+                                        </a>\
+                                        <em class="goods-delete">Delete the selected goods</em>\
+                                        <em class="goods-num">\
+                                            sum <span class="sum"></span> Do it by hand,\
+                                            Selected&nbsp;<span class="sum-selected"></span>&nbsp;\
+                                        </em>\
+                                    </div>\
+                                    <div class="cart-foot-right">\
+                                        <em class="total-bill">\
+                                            Total (excluding freight)：\
+                                        <span class="bill-price"></span>\
+                                        </em>\
+                                        <a href="javascript:;" class="order-btn ban-order">To settle</a>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                        </div >');
+
+        $(".header").after($cartContainer);
+
+        // 获取购物车数据
+        function getshopping(name) {
+            return JSON.parse(localStorage.getItem(name));
+        }
+        var alldata = window.localStorage;
+        delete alldata.easyweb
+        let goodsList = []
+        Object.getOwnPropertyNames(alldata).forEach(function (key) {
+            console.log("00:" + alldata[key]);
+            var val = JSON.parse(alldata[key]);
+            goodsList.push({
+                id: val.id,
+                number: val.number
+            })
+        });
+        let bodyList = []
+        $.ajax({
+            type: 'POST',
+            url: '/admin/cart_list',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({
+                goodsList: goodsList
+            }),
+            success: function (response) {
+                const { code, data } = response;
+                if (code == 1) {
+                    let datas = data.map(item => {
+                        return {
+                            ...item,
+                            img: item.url,
+                            goodTip: item.name,
+                            singalPrice: `￡${item.porice}`,
+                            cheack: false
+                        }
+                    })
+                    bodyList = datas
+                    $.each(datas, function (i, e) {
+                        var newTr = '';
+                        var $newLi = $('<li class="goods-list">\
+                                    <table class="goods-body">\
+                                    </table>\
+                                </li>');
+
+                        $(e).each(function (i, e) {
+                            newTr += '<tr>\
+                                    <td class="goods-col-select">\
+                                        <a href="javascript:;" class="check-label check-product" data-id="'+ e.id + '">\
+                                            <i class="checkbox">\
+                                                <span class="check-mark"></span>\
+                                            </i>\
+                                        </a>\
+                                        <a href="javascript:;" class="goods-img">\
+                                            <img src="' + e.img + '"\
+                                                alt="">\
+                                        </a>\
+                                        <a href="javascript:;" class="goods-info">\
+                                            <h4 class="goods-info-title">' + e.name + '</h4>\
+                                            <p class="goods-info-tips">' + e.goodTip + '</p>\
+                                        </a>\
+                                    </td>\
+                                    <td class="goods-col-price">\
+                                        <span>' + e.singalPrice + '</span>\
+                                    </td>\
+                                    <td class="goods-col-volumes">\
+                                        <div class="num-ctrl-area clearfix">\
+                                            <button class="minus" data-id="'+ e.id + '">-</button>\
+                                            <input type="text" data-id="'+ e.id + '" value="' + e.number + '" class="input">\
+                                            <button class="plus" data-id="'+ e.id + '">+</button>\
+                                            <em class="hint"></em>\
+                                        </div>\
+                                    </td>\
+                                    <td class="goods-col-total">\
+                                        <span></span>\
+                                    </td>\
+                                    <td class="goods-col-ctrl">\
+                                        <span>- -</span>\
+                                        <i class="del-product">\
+                                            <span class="line-left"></span>\
+                                            <span class="line-right"></span>\
+                                        </i>\
+                                    </td>\
+                                </tr>';
+                        });
+                        $newLi.children("table.goods-body").append(newTr);
+                        $newLi.appendTo($("ul.goods-ul"));
+                    });
+                    setTimeout(() => {
+                        var shopcart = new ShopCart();
+                    }, 0)
+                }
+            }
+        });
+
+
+
+        (function (win, undefined) {
+            var ShopCart = function () {
+                this.judge = '';
+                this.curUnitBtn = null;
+                this.fixedObj();
+                this.dynamic1Obj();
+                this.calcInfo();
+                this.singalDel();
+                this.globalDel();
+
+                this.orderBtnCss();
+                this.twoBtn();
+                this.floatDelBtn();
+                this.checkBox();
+                this.inputChange();
+                this.fixed();
+                this.init();
+
+                this.orderBtn.on('click', function () {
+                    let cheackList = bodyList.filter(item => item.cheack)
+                    if (!cheackList.length) return
+                    layer.open({
+                        type: 1
+                        , content: '<div style="padding: 20px 80px;">Are you sure you want to purchase?</div>'
+                        , btn: ['cancel', 'determine']
+                        , btnAlign: 'c'
+                        , shade: 0
+                        , yes: function () {
+                            layer.closeAll();
+                        },
+                        btn2: function () {
+                            var data = [];
+                            cheackList.forEach(item => {
+                                data.push({
+                                    id: item.id,
+                                    name: item.name,
+                                    number: item.number
+                                })
+                            })
+                            //判断库存
+                            let isStock = true
+                            let noStockName = []
+                            data.forEach(function (pro, index) {
+                                $.ajax({
+                                    type: "get",
+                                    url: "/api/shoppinfo?id=" + pro.id,
+                                    success: function (res) {
+                                        val = res.data[0];
+                                        if (Number(pro.number) > Number(val.stock)) {
+                                            isStock = false
+                                            noStockName.push(pro.name)
+                                        }
+                                        if (index + 1 >= data.length) {
+                                            if (isStock) {
+                                                $.ajax({
+                                                    type: "post",
+                                                    url: "/api/addshopcardinfo",
+                                                    data: { data: JSON.stringify(data) },
+                                                    success: function (datas) {
+                                                        if (datas.flog) {
+                                                            layer.msg('Successfully added the order', { icon: 6 });
+                                                        } else {
+                                                            layer.msg('Program exception!', { icon: 5, time: 1000 });
+                                                        }
+                                                        localStorage.clear();
+                                                        location.reload()
+                                                    },
+                                                    error: function (err) {
+                                                        layer.msg('Program exception!', { icon: 5, time: 1000 });
+                                                    }
+                                                });
+                                                layer.msg('Purchase succeeded!');
+                                                localStorage.clear();
+                                            } else {
+                                                layer.msg(noStockName.join() + 'Insufficient commodity inventory!', { icon: 5, time: 1000 });
+                                            }
+                                        }
+                                    }
+                                })
+                            })
+                        }
+                    });
+                })
+            };
+            //修改手办信息数据
+            function setGoodData(id, key, val) {
+                let goods = bodyList.find(goods => goods.id == id)
+                if (goods.id != undefined) {
+                    goods[key] = val
+                }
+            };
+            //修改全部手办信息数据
+            function setGoodDataAll(key, val) {
+                bodyList.forEach(goods => {
+                    goods[key] = val
+                })
+            };
+            ShopCart.prototype = {
+                constructor: ShopCart,
+                //初始化事件
+                init: function () {
+                    var shopCart = this;
+
+                    this.input.each(function (i, e) {
+                        var $thisButton = $(e).parent().find(shopCart.button);
+                        shopCart.buttonCss($thisButton, $(e).val());
+                    });
+
+                    /*编辑按钮*/
+                    this.editBtn.parent().on("click", function () {
+
+                        shopCart.editBtn.toggleClass(shopCart.edit);
+                        if (shopCart.editBtn.hasClass(shopCart.edit)) {
+                            shopCart.editBtn.text("edit");
+                            shopCart.delCtrl.show().siblings().fadeOut(100);
+                        } else {
+                            shopCart.editBtn.text("complete");
+                            shopCart.delCtrl.hide().siblings().fadeIn(100);
+                        };
+                    });
+                    /*弹出框cancel按钮*/
+                    this.cancelBtn.on("click", function () {
+                        shopCart.floatBox.fadeOut(200);
+                    });
+                    /*弹出框关闭按钮*/
+                    this.closeBtn.on("click", function () {
+                        shopCart.floatBox.fadeOut(200);
+                    });
+
+                    $(window).on("resize scroll", function () {
+                        shopCart.fixed();
+                    });
+                },
+                //获取固定的元素
+                fixedObj: function () {
+                    this.mzContainer = $(".mzContainer");
+                    this.cartFoot = this.mzContainer.find("div.shop-cart-footer");
+                    this.checkAll = this.mzContainer.find("a.check-all"); //全选按钮
+                    this.sum = this.mzContainer.find("span.sum"); //总件数
+                    this.sumed = this.mzContainer.find("span.sum-selected"); //已选总件数
+                    this.billPrice = this.mzContainer.find("span.bill-price"); //合计价格
+                    this.orderBtn = this.mzContainer.find("a.order-btn"); //结算按钮
+                    this.editBtn = this.mzContainer.find("td.edit-area>span.edit"); //编辑按钮
+                    this.delSelected = this.mzContainer.find("em.goods-delete"); //删除选中手办按钮
+                    //悬浮提示框区域
+                    this.floatBox = $(".float-box");
+                    this.delBtn = this.floatBox.find("a.delete");
+                    this.cancelBtn = this.floatBox.find("a.cancel");
+                    this.closeBtn = this.floatBox.find("i.close-btn");
+                    this.confirmTitle = this.floatBox.find("h4.confirm-title>span");
+                    this.confirmCon = this.floatBox.find("div.confirm-content");
+                    //class样式
+                    this.checked = 'checked';
+                    this.forbid = 'forbid';
+                    this.fixSite = 'fixed';
+                    this.banOrder = 'banOrder';
+                    this.edit = 'edit';
+                },
+                //获取当存在删除添加手办时的变动元素
+                dynamic1Obj: function () {
+                    this.checkLabelAll = $("a.check-label");
+                    this.checkContainer = $(".check-container");
+                    this.cartNav = this.checkContainer.children(".shop-cart-nav");
+                    this.goodsList = this.checkContainer.find("li.goods-list");
+                    this.goodsHeader = this.goodsList.children("table.goods-header");
+                    this.goodsBody = this.goodsList.children("table.goods-body");
+                    this.checkLocalPart = this.goodsHeader.find("a.check-local-part"); //某个品类的头部按钮
+                    this.goodsTr = this.goodsBody.find("tr"); //手办卡片
+                    this.checkProduct = this.goodsBody.find("a.check-product"); //单个手办勾选按钮
+                    this.button = this.goodsBody.find("button");
+                    this.plus = this.goodsBody.find(".plus"); //加号按钮
+                    this.minus = this.goodsBody.find(".minus"); //减号按钮
+                    this.input = this.goodsBody.find(".input"); //输入框
+                    this.singalPrice = this.goodsBody.find("td.goods-col-price>span"); //单价
+                    this.smallTotal = this.goodsBody.find("td.goods-col-total>span"); //小计
+                    this.delCtrl = this.goodsBody.find("td.goods-col-ctrl>span"); //小计后面的编辑区
+                    this.delProduct = this.goodsBody.find("i.del-product");
+                },
+                //获取选中与未选中变化时的元素
+                dynamic2Obj: function () {
+                    this.checkLocalPartEd = $("a.check-local-part.checked"); //某个品类中已经选中的全选按钮
+                    this.checkProductEd = $("a.check-product.checked"); //单个手办中已经选中的勾选按钮
+                },
+                //总计、总件数、已选件数、小计计算
+                calcInfo: function () {
+                    var shopCart = this;
+                    this.dynamic2Obj();
+                    var sum = 0,
+                        sumed = 0,
+                        total = 0;
+                    this.goodsTr.each(function (i, e) {
+                        var $e = $(e),
+                            numVal = parseInt($e.find(shopCart.input).val()), //输入框值
+                            unitPrice = parseInt($e.find(shopCart.singalPrice).text().slice(1)), //单价
+                            $smalltotalTxt = $e.find(shopCart.smallTotal); //小计
+                        sum += numVal; //计算总件数
+                        $smalltotalTxt.text("￡" + (numVal * unitPrice).toFixed(2)); //计算小计价格
+                    });
+                    this.checkProductEd.closest(shopCart.goodsTr).each(function (i, e) {
+                        var $e = $(e),
+                            numVal = parseInt($e.find(shopCart.input).val()),
+                            unitPrice = parseInt($e.find(shopCart.singalPrice).text().slice(1)); //单价
+                        sumed += numVal; //已选总件数
+                        total += unitPrice * numVal; //计算总价价格
+                    });
+                    this.sum.text(sum);
+                    this.sumed.text(sumed);
+                    this.billPrice.text('￡' + total.toFixed(2));
+                },
+                //当输入框的值<=1或者>=10时，旁边的button变成禁止样式
+                buttonCss: function (button, value) {
+                    var shopCart = this;
+                    button.each(function () {
+                        $(this).removeClass(shopCart.forbid);
+                    });
+                    if (value == 1) {
+                        button.eq(0).addClass(shopCart.forbid);
+                    };
+                },
+                //button按钮的点击事件
+                twoBtn: function () {
+                    var shopCart = this;
+                    shopCart.plus.on("click", function () {
+                        var $this = $(this);
+                        var value = parseInt($this.prev().val());
+                        value++;
+                        shopCart.buttonCss($this.parent().find(shopCart.button), value);
+                        $this.prev().val(value);
+                        setGoodData($(this).attr("data-id"), 'number', value)
+                        shopCart.calcInfo();
+                    });
+
+                    /*减号按钮*/
+                    shopCart.minus.on("click", function () {
+                        var $this = $(this);
+                        var value = parseInt($this.next().val());
+                        value--;
+                        if (value < 1) {
+                            return;
+                        };
+                        shopCart.buttonCss($this.parent().find(shopCart.button), value);
+                        $this.next().val(value);
+                        setGoodData($(this).attr("data-id"), 'number', value)
+                        shopCart.calcInfo();
+                    });
+                },
+                //输入框改变事件
+                inputChange: function () {
+                    var shopCart = this;
+                    this.input.on("change", function () {
+                        var $this = $(this),
+                            $thisVal = parseInt($this.val());
+                        if ($thisVal > 10) {
+                            $this.val(10);
+                        } else if ($thisVal < 1 || isNaN($thisVal)) {
+                            $this.val(1);
+                        } else {
+                            $this.val($thisVal);
+                        };
+                        shopCart.calcInfo();
+                        console.log($this.parent().find(shopCart.button))
+                        setGoodData($(this).attr("data-id"), 'number', $thisVal)
+                        shopCart.buttonCss($this.parent().find(shopCart.button), parseInt($this.val()));
+                    });
+                },
+                //结算按钮样式变化
+                orderBtnCss: function () {
+                    this.orderBtn.on('click', function () {
+
+                    })
+                    if (parseInt(this.sumed.text()) != 0) {
+                        this.orderBtn.removeClass(this.banOrder);
+                    } else {
+                        this.orderBtn.addClass(this.banOrder);
+                    };
+                },
+                //删除选中手办的点击事件
+                globalDel: function () {
+                    var shopCart = this;
+                    this.delSelected.on("click", function () {
+                        shopCart.judge = "global";
+                        shopCart.floatBox.fadeIn(200);
+                        if (shopCart.checkProductEd.length != 0) {
+                            shopCart.confirmTitle.text("delete");
+                            shopCart.confirmCon.text("Are you sure you want to delete the selected action?");
+                            shopCart.delBtn.show();
+                            shopCart.cancelBtn.text("cancel");
+                        } else {
+                            shopCart.confirmTitle.text("Tips");
+                            shopCart.confirmCon.text("Please select the goods you want to delete");
+                            shopCart.delBtn.hide();
+                            shopCart.cancelBtn.text("determine");
+                        };
+                    });
+                },
+                //删除单个手办的点击事件
+                singalDel: function () {
+                    var shopCart = this;
+                    this.delProduct.on("click", function () {
+                        shopCart.judge = "singal";
+                        shopCart.curUnitBtn = $(this);
+                        shopCart.floatBox.fadeIn(200);
+                        shopCart.confirmTitle.text("delete");
+                        shopCart.confirmCon.text("Are you sure you want to delete this action?");
+                        shopCart.delBtn.show();
+                        shopCart.cancelBtn.text("cancel");
+                    });
+                },
+                //悬浮提示框中的determine删除点击事件
+                floatDelBtn: function () {
+                    var shopCart = this;
+                    shopCart.delBtn.on("click", function () {
+                        shopCart.floatBox.fadeOut(200);
+                        if (shopCart.judge == "global") {
+                            Array.prototype.forEach.call(shopCart.checkProductEd.closest(shopCart.goodsTr), function (pro) {
+                                let goodsName = $(pro).find(".goods-info-title").html()
+                                localStorage.removeItem(goodsName)
+                            })
+                            shopCart.checkProductEd.closest(shopCart.goodsTr).remove();
+                            if (shopCart.checkLocalPart.hasClass(shopCart.checked)) {
+                                shopCart.checkLocalPartEd.closest(shopCart.goodsList).remove();
+                                if (shopCart.checkAll.hasClass(shopCart.checked)) {
+                                    shopCart.mzContainer.html("").css("height", '25rem');
+                                };
+                            };
+                        } else if (shopCart.judge == "singal") {
+                            var curLiIndex = shopCart.curUnitBtn.closest(shopCart.goodsList).index();
+                            let goodsName = $(shopCart.goodsList[curLiIndex]).eq(0).find(".goods-info-title").html()
+                            shopCart.curUnitBtn.closest(shopCart.goodsTr).remove();
+                            if (shopCart.goodsList.eq(curLiIndex).find(shopCart.goodsTr).length == 0) {
+                                shopCart.goodsList.eq(curLiIndex).remove();
+                            };
+                            localStorage.removeItem(goodsName)
+                        };
+                        shopCart.dynamic1Obj();
+                        shopCart.dynamic2Obj();
+                        shopCart.calcInfo();
+                        shopCart.orderBtnCss();
+                        shopCart.fixed();
+                        if (shopCart.goodsTr.length == 0) {
+                            // shopCart.mzContainer.html("").css("height", '25rem');
+                            shopCart.mzContainer.css("height", '25rem');
+                        };
+                    });
+                },
+                //checkbox勾选框点击事件
+                checkBox: function () {
+                    var shopCart = this;
+                    /*全选按钮*/
+                    shopCart.checkAll.on("click", function () {
+                        var $this = $(this);
+                        $this.toggleClass(shopCart.checked);
+                        shopCart.dynamic2Obj();
+                        if ($this.hasClass(shopCart.checked)) {
+                            shopCart.checkLabelAll.addClass(shopCart.checked);
+                            setGoodDataAll('cheack', true)
+                        } else {
+                            shopCart.checkLabelAll.removeClass(shopCart.checked);
+                            setGoodDataAll('cheack', false)
+                        };
+                        shopCart.calcInfo();
+                        shopCart.orderBtnCss();
+                    });
+
+                    /*分类勾选按钮*/
+                    shopCart.checkLocalPart.on("click", function () {
+                        var $this = $(this);
+                        $this.toggleClass(shopCart.checked);
+                        shopCart.dynamic2Obj();
+                        var $thisChildCheck = $this.closest(shopCart.goodsList).find(shopCart.checkProduct); //某一品类的单个手办勾选按钮
+                        if ($this.hasClass(shopCart.checked)) {
+                            $thisChildCheck.addClass(shopCart.checked);
+                        } else {
+                            $thisChildCheck.removeClass(shopCart.checked);
+                        };
+                        if (shopCart.checkLocalPartEd.length == shopCart.checkLocalPart.length) {
+                            shopCart.checkAll.addClass(shopCart.checked);
+                        } else {
+                            shopCart.checkAll.removeClass(shopCart.checked);
+                        }
+                        shopCart.calcInfo();
+                        shopCart.orderBtnCss();
+                    });
+                    /*具体手办勾选按钮*/
+                    shopCart.checkProduct.on("click", function () {
+                        var $this = $(this);
+                        $this.toggleClass(shopCart.checked);
+                        if ($this.hasClass(shopCart.checked)) {
+                            setGoodData($(this).attr("data-id"), "cheack", true)
+                        } else {
+                            setGoodData($(this).attr("data-id"), "cheack", false)
+                        }
+                        shopCart.dynamic2Obj();
+                        var $siblings = $this.closest(shopCart.goodsBody).find(shopCart.checkProduct),
+                            $siblingsEd = $this.closest(shopCart.goodsBody).find(shopCart.checkProductEd),
+                            $thisPart = $this.closest(shopCart.goodsList).find(shopCart.checkLocalPart);
+                        if ($siblings.length == $siblingsEd.length) {
+                            $thisPart.addClass(shopCart.checked);
+                        } else {
+                            $thisPart.removeClass(shopCart.checked);
+                        };
+                        if (shopCart.checkProduct.length == shopCart.checkProductEd.length) {
+                            shopCart.checkAll.addClass(shopCart.checked);
+                        } else {
+                            shopCart.checkAll.removeClass(shopCart.checked);
+                        };
+
+                        shopCart.calcInfo();
+                        shopCart.orderBtnCss();
+                    });
+                },
+                //foot结算区域位置变化
+                fixed: function () {
+                    var offsetHeight = this.checkContainer.offset().top + this.checkContainer.outerHeight() + this.cartFoot.outerHeight() - $(window).height();
+                    if (offsetHeight >= $(document).scrollTop()) {
+                        this.cartFoot.addClass(this.fixSite);
+                    } else {
+                        this.cartFoot.removeClass(this.fixSite);
+                    };
+                }
+            }
+            window.ShopCart = ShopCart;
+        }(window));
+
+    })
+</script>
+{{/block}}

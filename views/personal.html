@@ -1,0 +1,316 @@
+{{extend './head.html'}}
+{{block 'content'}}
+<div class="index">
+    <div class="my-content layui-anim layui-anim-upbit">
+        <div class="title">Modify user information</div>
+        <div class="change-pass" id="openPass">Change Password</div>
+        <div class="form-bdoy">
+            <form class="layui-form" lay-filter="user-form">
+
+                <input type="hidden" name="userId" />
+                <div class="layui-form-item img-item">
+                    <input type="file" name="avator" id="avator" style="opacity: 0;" hidden>
+                    <div class="img-bdoy" id="avatorShow">
+                        <img class="user-avator" id="urlShow" />
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">user name</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="username" autocomplete="off" placeholder="enter one user name" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-block">
+                        <label class="layui-form-label">e-mail address</label>
+                        <div class="layui-input-block">
+                            <input type="email" name="email" placeholder="Please enter the email address" autocomplete="off"
+                                class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item footer-bottom">
+                    <button type="button" class="layui-btn" lay-submit lay-filter="submit-user">Submit Now</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">Reset</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <script type="text/html" id="changePassHtml">
+        <div class="layui-card-header">
+            <h2 class="header-title">Change Password</h2>
+        </div>
+        <div class="layui-card-body" style="padding: 30px;">
+            <form class="layui-form" id="form-psw">
+                <div class="layui-form-item">
+                    <input type="password" name="oldPsw" required lay-verify="required" class="layui-input"
+                        placeholder="Please enter the original password" lay-verType="tips" style="width:100%">
+                </div>
+                <div class="layui-form-item">
+                    <input type="password" name="newPsw" required lay-verify="required" class="layui-input"
+                        placeholder="Please enter a new password" lay-verType="tips" style="width:100%">
+                </div>
+                <div class="layui-form-item">
+                    <input type="password" name="rePsw" required lay-verify="required|repsw" class="layui-input"
+                        placeholder="Enter the new password again" lay-verType="tips" style="width:100%">
+                </div>
+                <div class="layui-form-item">
+                    <button type="button" class="layui-btn layui-btn-fluid" lay-submit  lay-filter="submit-psw">Confirm modification</button>
+                </div>
+            </form>
+        </div>
+    </script>
+</div>
+{{/block}}
+{{block 'contentcss'}}
+<style>
+    .index {
+        margin: 0px auto;
+        width: 980px;
+    }
+
+    .my-content {
+        position: relative;
+        margin: 50px auto;
+        padding: 20px 30px 10px;
+        width: 650px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 10px #000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #fff;
+        min-height: 500px;
+    }
+
+    .my-content .title {
+        font-size: 35px;
+        color: #666;
+    }
+
+    .form-bdoy {
+        padding: 40px 30px 0px;
+    }
+
+    img[src=""],
+    img:not([src]) {
+        opacity: 0;
+    }
+
+    .img-bdoy {
+        display: flex;
+        justify-content: center;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        overflow: hidden;
+    }
+
+    .img-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .user-avator {
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+        outline: none;
+    }
+
+    .layui-form-item .layui-form-label {
+        width: 80px;
+        font-size: 14px;
+        padding-right: 0px;
+        text-align: justify;
+        text-align-last: justify;
+    }
+
+    .layui-form-item .layui-input {
+        width: 300px;
+        border-radius: 8px;
+        height: 40px;
+    }
+
+    .footer-bottom {
+        margin-top: 60px;
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .change-pass {
+        position: absolute;
+        right: 20px;
+        top: 32px;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+</style>
+{{/block}}
+{{block 'contentjs'}}
+<script>
+    layui.use(['jquery', 'layer', 'form'], function () {
+        history.forward()
+        var $ = layui.jquery;
+        var form = layui.form;
+        var userInfo = null
+        //获取用户信息
+
+        $.ajax({
+            url: "/api/userInfo",
+            dataType: 'json',
+            type: 'post',
+            success: function (res) {
+                if (res.flog) {
+                    if (!res.data.length) {
+                        return;
+                    }
+                    userInfo = res.data[0]
+
+                    form.val("user-form", {
+                        userId: userInfo.userId,
+                        username: userInfo.username,
+                        email: userInfo.email
+                    });
+                    $('#urlShow').attr('src', userInfo.avator);
+                }
+            }
+        })
+
+        //保存用户数据
+        form.on('submit(submit-user)', function (info) {
+            var data = info.field;
+            if (!$('#urlShow').attr("src")) {
+                layer.msg('The avatar cannot be empty!', { icon: 5, time: 1000, offset: '550px', anim: 6 });
+                return;
+            }
+            if (!data.username) {
+                layer.msg('User name cannot be empty!', { icon: 5, time: 1000, offset: '550px', anim: 6 });
+                return;
+            }
+            if (!data.email) {
+                layer.msg('Email address cannot be empty!', { icon: 5, time: 1000, offset: '550px', anim: 6 });
+                return;
+            }
+            var fromData = new FormData();
+            fromData.append('userId', data.userId);
+            fromData.append('username', data.username);
+            fromData.append('email', data.email);
+            fromData.append('avator', $('#avator')[0].files[0]);
+            layer.load(2);
+            $.ajax({
+                type: "POST",
+                url: "/api/updateUserInfo",
+                data: fromData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    layer.closeAll();
+                    if (data.flog == 1) {
+                        location.href = "/index"
+                        layer.msg("Modification succeeded", { icon: 6, time: 1500 });
+                    }
+                }
+            })
+            return false;
+        })
+
+        $("#openPass").on('click', function () {
+            layer.open({
+                content: $('#changePassHtml').html(),
+                anim: 2,
+                type: 1,
+                isOutAnim: false,
+                closeBtn: false,
+                btn: [],
+                shadeClose: true,
+                area: '382px',
+                title: false,
+                shade: .2,
+                end() {
+                    layer.closeAll('tips');
+                }
+            })
+        })
+
+        //监听提交
+        form.on('submit(submit-psw)', function (data) {
+            layer.load(2);
+            $.ajax({
+                type: "POST",
+                url: "/api/UpdateUserPassById",
+                data: data.field,
+                success: function (data) {
+                    if (data.flog) {
+                        layer.closeAll('loading');
+                        layer.msg("Modification succeeded", { icon: 6, time: 1500 });
+                        // window.location.replace('/login')
+                        location.href = "/login"
+                    } else {
+                        layer.closeAll('loading');
+                        layer.msg(data.mag, { icon: 5, time: 1500 });
+                    }
+                }
+            })
+            return false;
+        });
+
+        //添加表单验证方法
+        form.verify({
+            repsw: function (t) {
+                if (t !== $('#form-psw input[name=newPsw]').val()) {
+                    return 'The two passwords entered are inconsistent';
+                }
+            }
+        });
+
+        $('#avatorShow').on('click', function () {
+            $('#avator').trigger("click");
+        })
+        function checkPic(upload) {
+            var valid = $(upload).attr('id');
+            var picPath = document.getElementById(valid).value;
+            var type = picPath.substring(picPath.lastIndexOf(".") + 1, picPath.length).toLowerCase();
+            if (type !== "jpg" && type !== "bmp" && type !== "gif" && type !== "png") {
+                alert("Please upload the correct image format");
+                return false;
+            }
+            return true;
+        }
+        function getObjectURL(file) {
+            var url = null;
+            if (window.createObjectURL != undefined) {
+                url = window.createObjectURL(file);
+            } else if (window.URL != undefined) {
+                url = window.URL.createObjectURL(file);
+            } else if (window.webkitURL != undefined) {
+                url = window.webkitURL.createObjectURL(file);
+            }
+            return url;
+        }
+
+        function PreviewImage(upload, width, height) {
+            if (checkPic(upload)) {
+                try {
+                    var imgPath = getObjectURL(upload.files[0]);
+                    console.log(JSON.stringify(imgPath))
+                    $('#urlShow').attr('src', imgPath);
+
+                } catch (e) {
+                    alert("Cannot preview picture");
+                }
+            }
+        }
+        $('#avator').on('change', function (e) {
+            PreviewImage(this, 100, 100);
+        })
+    })
+</script>
+{{/block}}

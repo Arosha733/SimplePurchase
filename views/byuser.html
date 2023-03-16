@@ -1,0 +1,129 @@
+{{extend './head.html'}}
+{{block 'content'}}
+<div class="index">
+    <div class="my-content layui-anim layui-anim-upbit">
+        <div class="title">{{userInfo.username}} User information</div>
+        <div class="form-bdoy">
+            <form class="layui-form" lay-filter="user-form">
+
+                <input type="hidden" name="userId" />
+                <div class="layui-form-item img-item">
+                    <div class="img-bdoy" id="avatorShow">
+                        <img class="user-avator" id="urlShow" src="{{userInfo.avator}}" />
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">user ID</label>
+                    <div class="layui-input-block show-item">
+                        {{userInfo.userId}}
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">user name</label>
+                    <div class="layui-input-block  show-item">
+                        {{userInfo.username}}
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-block">
+                        <label class="layui-form-label">e-mail address</label>
+                        <div class="layui-input-block  show-item">
+                            {{userInfo.email}}
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{{/block}}
+{{block 'contentcss'}}
+<style>
+    .index {
+        margin: 0px auto;
+        width: 980px;
+    }
+
+    .my-content {
+        margin: 50px auto;
+        padding: 20px 30px 10px;
+        width: 650px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 10px #000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #fff;
+        min-height: 500px;
+    }
+
+    .my-content .title {
+        font-size: 35px;
+        color: #666;
+    }
+
+    .form-bdoy {
+        padding: 40px 30px 0px;
+    }
+
+    img[src=""],
+    img:not([src]) {
+        opacity: 0;
+    }
+
+    .img-bdoy {
+        display: flex;
+        justify-content: center;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        overflow: hidden;
+    }
+
+    .img-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .user-avator {
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+        outline: none;
+    }
+
+    .layui-form-item .layui-form-label {
+        width: 80px;
+        font-size: 14px;
+        padding-right: 0px;
+        text-align: justify;
+        text-align-last: justify;
+    }
+
+    .layui-form-item .layui-input {
+        width: 300px;
+        border-radius: 8px;
+        height: 40px;
+    }
+
+    .show-item{
+        font-size: 22px;
+        text-align: center;
+    }
+</style>
+{{/block}}
+{{block 'contentjs'}}
+<script>
+    layui.use(['jquery', 'layer', 'form'], function () {
+        var $ = layui.jquery;
+        var form = layui.form;
+    })
+</script>
+{{/block}}

@@ -1,0 +1,359 @@
+{{extend './head.html'}}
+{{block 'content'}}
+<div class="Xcontent">
+    <ul class="Xcontent01">
+
+        <div class="Xcontent-bimg"><img src="{{info.urlList[0]}}"></div>
+        <ol class="Xcontent08">
+            {{each info.urlList}}
+            <div class="Xcontent-img"><img src="{{$value}}"></div>
+            {{/each}}
+        </ol>
+        <ol class="Xcontent13">
+            <div class="Xcontent14"><a href="#">
+                    <p>{{info.name}}</p>
+                </a></div>
+            <div class="Xcontent16">
+                <p>{{info.info}}</p>
+            </div>
+            <div class="Xcontent17">
+                <p class="Xcontent18">price</p>
+                <p class="Xcontent19">￡<span>{{info.porice}}</span></p>
+                <div class="Xcontent20" style="display: flex;">
+                    <p class="Xcontent21" style="float: none;">stock</p>
+                    <p class="Xcontent25" style="float: none;">surplus{{info.stock}}</p>
+                </div>
+                <div class="Xcontent23">
+                    <p class="Xcontent24">service</p>
+                    <p class="Xcontent25">30 day worry free return&nbsp;&nbsp;&nbsp;&nbsp; 48 hour quick refund &nbsp;&nbsp;&nbsp;&nbsp; No postage for over RMB 88
+                    </p>
+                </div>
+
+            </div>
+            <div class="Xcontent30">
+                <p class="Xcontent31">number</p>
+                <div class="Xcontent32"><img src="public/img/shangpinxiangqing/X15.png"></div>
+                <form>
+                    <input class="input count-input" value="1">
+                </form>
+                <div class="Xcontent33"><img src="public/img/shangpinxiangqing/16.png"></div>
+
+            </div>
+            <!-- <div class="Xcontent34"><a href="#"><img src="public/img/shangpinxiangqing/X17.png"></a></div> -->
+            <div class="Xcontent35 myModals" data-toggle="modal" data-method="setTop" sid="{{info.id}}"><a href="#"><img
+                        src="public/img/shangpinxiangqing/X18.png"></a></div>
+        </ol>
+    </ul>
+
+    <div class="add-comm comm-body">
+        <form class="layui-form">
+            <div class="layui-form-item layui-form-text">
+                <textarea id="comm-val" class="layui-textarea" style="resize:none" placeholder="Write something"></textarea>
+            </div>
+            <div class="btnbox">
+                <div class="btn" id="add-comm">determine</div>
+            </div>
+        </form>
+    </div>
+
+    <div class="comm-body">
+        <div class="btns">
+            <a class="btn">Comment List</a>
+        </div>
+
+        <div id="LAY-msg-box">
+            {{each commList}}
+            <div class="info-item">
+                <img class="info-img gouser" src="{{$value.avator}}" userid="{{$value.userId}}">
+                <div class="info-text">
+                    <div class="header">
+                        <p class="title">
+                            {{$value.username}}
+                        </p>
+                        <p class="time">{{$value.commDate}}</p>
+                    </div>
+                    <p class="info-intr">
+                        {{$value.commText}}
+                    </p>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+
+</div>
+{{/block}}
+{{block 'contentcss'}}
+<style>
+    * {
+        padding: 0px;
+        margin: 0px;
+    }
+
+
+    .comm-body {
+        width: 1100px;
+        margin: auto;
+        overflow: hidden;
+    }
+
+    .comm-body .btns {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .btns .btn {
+        color: #333;
+        text-decoration: none;
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+
+    .info-item {
+        display: flex;
+        font-size: 14px;
+        margin-bottom: 66px;
+    }
+
+    .info-item .info-img {
+        width: 68px;
+        height: 68px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-right: 20px;
+        box-sizing: content-box;
+    }
+
+    .info-item .info-text {
+        padding-left: 10px;
+        flex: 1;
+    }
+
+    .input {
+        height: 31.99px;
+    }
+
+    .info-text .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .info-text .title {
+        overflow: hidden;
+        margin-bottom: 10px;
+        margin-top: 6px;
+        color: #999999;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    .info-text .info-intr {
+        line-height: 24px;
+        font-size: 13px;
+    }
+
+    .add-comm {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .btnbox {
+        text-align: right;
+        padding-top: 20px;
+    }
+
+    .btnbox .btn {
+        display: inline-block;
+        height: 38px;
+        line-height: 38px;
+        padding: 0 18px;
+        background-color: #009688;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+    }
+</style>
+{{/block}}
+
+{{block 'contentjs'}}
+<script>
+    var count = 1
+    $(document).ready(function () {
+        var $miaobian = $('.Xcontent08>div');
+        var $huantu = $('.Xcontent-bimg>img');
+        $miaobian.mousemove(function () { miaobian(this); });
+        function miaobian(thisMb) {
+            for (var i = 0; i < $miaobian.length; i++) {
+                $miaobian[i].style.borderColor = '#dedede';
+            }
+            thisMb.style.borderColor = '#cd2426';
+
+            $huantu[0].src = thisMb.children[0].src;
+        }
+        $(".Xcontent33").click(function () {
+            count = parseInt($('.input').val()) + 1;
+            $('.input').val(count);
+        })
+
+        $(".Xcontent32").click(function () {
+            count = count - 1
+            if (count > 0) {
+                $(".input").val(count);
+            }
+        })
+
+        $(".input").change(function () {
+            count = $(".input").val()
+            if (count < 0) {
+                $(".input").val(0);
+            }
+            count = $(".input").val()
+        })
+
+    })
+
+    layui.use('layer', function () {
+        var $ = layui.jquery, layer = layui.layer;
+        function getCookie(name) {
+            var arr = document.cookie.split("; ");
+            for (var i = 0, len = arr.length; i < len; i++) {
+                var item = arr[i].split("=");
+                if (item[0] == name) {
+                    return item[1];
+                }
+            }
+            return "";
+        }
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) { return pair[1]; }
+            }
+            return (false);
+        }
+
+        var goodsId = getQueryVariable("id")
+        function getshopping(name) {
+            return JSON.parse(localStorage.getItem(name));
+        }
+
+        $(".gouser").on('click', function (e) {
+            var userId = $(this).attr("userid")
+            location.href = "/byuser?userId=" + userId
+        })
+
+        //触发事件
+        var active = {
+            setTop: function (othis) {
+                //判断是否登录
+                if (getCookie('user_key') == null) {
+                    layer.msg('Please login first', { icon: 5 });
+                    return;
+                }
+                var val;
+                var that = this;
+                var sid = $(that).attr('sid');
+                $.ajax({
+                    type: "get",
+                    url: "/api/shoppinfo?id=" + sid,
+                    success: function (datas) {
+                        if (datas.flog) {
+                            val = datas.data[0];
+                            var type = othis.data('type'), text = othis.text();
+                            layer.open({
+                                type: 1
+                                , offset: type
+                                , id: 'layerDemo' + type
+                                , content: '<div style="padding: 20px 100px;">Are you sure to purchase?</div>'
+                                , btn: ['cancel', 'determine']
+                                , btnAlign: 'c'
+                                , shade: 0
+                                , yes: function () {
+                                    layer.closeAll();
+                                },
+                                btn2: function () {
+                                    //判断库存
+                                    let numCount = Number(count)
+                                    if (getshopping(val.name) == null) {
+                                        numCount = count
+                                    } else {
+                                        numCount = Number(getshopping(val.name).number) + numCount
+                                    }
+                                    if (numCount > Number(val.stock)) {
+                                        layer.msg('Insufficient commodity inventory!', { icon: 5, time: 1000 });
+                                        return
+                                    }
+
+                                    if (getshopping(val.name) == null) {
+                                        localStorage.setItem(val.name, JSON.stringify({
+                                            id: val.id,
+                                            name: val.name,
+                                            number: numCount
+                                        }));
+                                    } else {
+                                        localStorage.setItem(val.name, JSON.stringify({
+                                            id: val.id,
+                                            name: val.name,
+                                            number: numCount,
+                                        }));
+                                    }
+                                    layer.msg('Successfully added to shopping cart', { icon: 6 });
+                                }
+                            });
+                        } else {
+                            layer.msg('Program exception!', { icon: 5, time: 1000 });
+                        }
+                    },
+                    error: function (err) {
+                        layer.msg('Program exception!', { icon: 5, time: 1000 });
+                    }
+                });
+            }
+        }
+
+        $('.myModals').on('click', function () {
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+        });
+
+
+        $("#add-comm").on('click', function () {
+            let text = $('#comm-val').val()
+            if (!text) {
+                layer.msg('Comments cannot be empty!', { icon: 5, time: 1000, offset: '550px', anim: 6 });
+                return;
+            }
+            layer.load(2);
+            $.ajax({
+                type: "POST",
+                url: "/api/addComm",
+                data: {
+                    commText: text,
+                    goodsId: goodsId
+                },
+                success: function (data) {
+                    layer.closeAll();
+                    if (data.flog == 1) {
+                        layer.msg("Comment succeeded", { icon: 6, time: 1500 });
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000)
+                    }
+                }
+            })
+        })
+
+
+    });
+
+</script>
+{{/block}}
