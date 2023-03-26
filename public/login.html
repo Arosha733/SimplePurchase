@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8" />
+    <title>Administrator Login</title>
+    <link rel="stylesheet" href="assets/libs/layui/css/layui.css" />
+    <link rel="stylesheet" href="assets/css/login.css" media="all">
+</head>
+
+<body>
+    <div class="login-wrapper">
+
+        <div class=" login-body">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <i class="layui-icon layui-icon-engine"></i>&nbsp;&nbsp;back-stage management
+                </div>
+                <div class="layui-card-body layui-form layui-form-pane">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><i class="layui-icon layui-icon-username"></i></label>
+                        <div class="layui-input-block">
+                            <input name="username" type="text" lay-verify="required" placeholder="account number"
+                                class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><i class="layui-icon layui-icon-password"></i></label>
+                        <div class="layui-input-block">
+                            <input name="password" type="password" lay-verify="required" placeholder="password"
+                                class="layui-input">
+                        </div>
+                    </div>
+                   
+                    <div class="layui-form-item">
+                        <button lay-filter="login-submit" class="layui-btn layui-btn-fluid" lay-submit>Login</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="assets/libs/layui/layui.js"></script>
+    <script>
+        layui.config({
+            base: 'module/'
+        }).use(['config', 'form'], function () {
+            var $ = layui.jquery;
+            var form = layui.form;
+            var config = layui.config;
+            // if (config.getToken()) {
+            //     location.replace('./index.html');
+            //     return;
+            // }
+
+            //Form submission 表单提交
+            form.on('submit(login-submit)', function (obj) {
+                var field = obj.field;
+                var form = obj.form;
+                layer.load(2);
+                $.ajax({
+                    url: config.base_server + 'isAdminLogin',
+                    data: field,
+                    type: 'post',
+                    dataType: 'JSON',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function (data) {
+                        if (data.code) {
+                            config.putToken(data.data);
+                            layer.msg('Login succeeded', { icon: 1 }, function () {
+                                location.replace('./index.html');
+                            });
+                        } else {
+                            layer.closeAll('loading');
+                            layer.msg(data.data, { icon: 5 });
+                            $('.layui-form-item input').val('');
+                        }
+                    },
+                    error: function (xhr) {
+                        layer.closeAll('loading');
+                        if (xhr.status == 400) {
+                            layer.msg('Wrong account or password', { icon: 5 });
+                            $('.layui-form-item input').val('');
+                        }
+                    },
+                    complete: function () {
+                        let capt = $('.login-captcha')[0];
+                        capt.src = capt.src + '?t=' + (new Date).getTime();
+                    }
+                });
+            });
+
+            // Graphic captcha 图形验证码
+            $('.login-captcha').click(function () {
+                this.src = this.src + '?t=' + (new Date).getTime();
+            });
+        });
+    </script>
+</body>
+
+</html>

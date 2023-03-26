@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8" />
+    <title>MyShopping</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="assets/css/publish.css">
+    <link rel="stylesheet" href="assets/libs/layui/css/layui.css" />
+    <link rel="stylesheet" href="assets/css/admin.css" />
+    <link rel="stylesheet" href="module/formSelects/formSelects-v4.css" />
+    <link rel="stylesheet" href="module/tag/tag.css">
+</head>
+
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+        <!-- head 头部 -->
+        <div class="layui-header" p-com="header"></div>
+
+        <!-- Sidebar 侧边栏 -->
+        <div class="layui-side" p-com="side"></div>
+
+        <!-- The main part 主体部分 -->
+        <div class="layui-body">
+            <div class="layui-tab" lay-allowClose="true" lay-filter="admin-pagetabs">
+                <ul class="layui-tab-title">
+                </ul>
+                <div class="layui-tab-content">
+                </div>
+            </div>
+            <div class="layui-icon admin-tabs-control layui-icon-prev" ew-event="leftPage"></div>
+            <div class="layui-icon admin-tabs-control layui-icon-next" ew-event="rightPage"></div>
+            <div class="layui-icon admin-tabs-control layui-icon-down">
+                <ul class="layui-nav admin-tabs-select" lay-filter="admin-pagetabs-nav">
+                    <li class="layui-nav-item" lay-unselect>
+                        <a href="javascript:;"></a>
+                        <dl class="layui-nav-child layui-anim-fadein">
+                            <dd ew-event="closeThisTabs" lay-unselect><a href="javascript:;">Close the current tab</a></dd>
+                            <dd ew-event="closeOtherTabs" lay-unselect><a href="javascript:;">Close other tabs</a></dd>
+                            <dd ew-event="closeAllTabs" lay-unselect><a href="javascript:;">Close all tabs</a></dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- bottom 底部 -->
+        <div class="layui-footer">This is the administrator background management data page, welcome to your arrival! <span class="pull-right">I can't do anything</span>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="assets/libs/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="assets/libs/q.js"></script>
+    <script type="text/javascript" src="assets/libs/pandyle.min.js"></script>
+    <script type="text/javascript" src="assets/libs/layui/layui.js"></script>
+    <script type="text/javascript" src="assets/libs/echarts.min.js"></script>
+    <script type="text/javascript" src="module/imgSwiper/move.js"></script>
+    <script type="text/javascript" src="module/imgSwiper/publishImg.js"></script>
+    <script>
+        layui.config({
+            base: 'module/'
+        }).extend({
+            formSelects: 'formSelects/formSelects-v4',
+            treetable: 'treetable-lay/treetable',
+            tag: 'tag/tag',
+            croppers: "imgSwiper/croppers",
+            cropper: 'imgSwiper/cropper/cropper'
+        }).use(['config', 'index', 'element', 'laytpl'], function () {
+            var config = layui.config;
+            var index = layui.index;
+            var element = layui.element;
+            var laytpl = layui.laytpl;
+
+            // Check whether the multi-tab feature is enabled 检查多标签功能是否开启
+            index.checkPageTabs();
+            //Gets the current user information 获取当前用户信息
+            index.getUser(function (user) {
+                // Check whether the multi-tab feature is enabled 检查多标签功能是否开启
+                $('.layui-layout-admin .layui-header').vm(user);
+                user.url && $('.layui-layout-admin .layui-header #adminImg').attr('src', user.url);
+                index.initLeftNav();
+                element.render('nav');
+                index.initRouter();
+                index.bindEvent();
+            });
+
+        });
+    </script>
+</body>
+
+</html>
