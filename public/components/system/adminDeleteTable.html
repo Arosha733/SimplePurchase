@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>TableDemo</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../assets/libs/layui/css/layui.css" media="all">
+</head>
+
+<body>
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>Are you sure to delete this administrator?</legend>
+    </fieldset>
+
+
+    <form class="layui-form" action="" lay-filter="example">
+
+        <div class="layui-form-item" style="margin-top: 20px">
+            <label class="layui-form-label">Administrator No:</label>
+            <div class="layui-input-block" style="margin-right: 20px">
+                <input type="text" name="id" disabled="true" autocomplete="off" placeholder="" id="id"
+                    class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="text-align: center">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" id="submit" lay-submit="" lay-filter="submit">confirm</button>
+                <button type="button" class="layui-btn layui-btn-primary">return</button>
+            </div>
+        </div>
+    </form>
+
+
+    <script src="../../assets/libs/layui/layui.js" charset="utf-8"></script>
+    <script src="../js/util.js" charset="utf-8"></script>
+    <script>
+
+        layui.config({
+            base: '/module/'
+        }).use(['jquery', 'layer', 'table', 'form', 'config'], function () {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form;
+            var config = layui.config;
+            var req = GetRequest();
+            var no = req['editNo'];
+            //Gets the currently edited data 获取当前编辑的数据
+            $.ajax({
+                url: config.base_server + 'GetAdminById?editNo=' + no,
+                dataType: 'json',
+                type: 'get',
+                success: function (data) {
+                    data = data.data;
+                    if (data.length) {
+                        $('#id').val(data[0].id);
+                    }
+                }
+
+            })
+            $('#submit').on('click', function () {
+
+                var data = form.val('example');
+                var id = data.id;
+                $.ajax({
+                    type: "POST",
+                    url: config.base_server + 'DeleteAdminById',
+                    async: false,
+                    data: { id: id },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == 1) {
+                            var index = parent.layer.getFrameIndex(window.name); //First get the index of the current iframe layer 先得到当前iframe层的索引
+                            alert("del success");
+                            parent.layer.close(index); //Perform the shutdown again 再执行关闭   
+                        }
+
+                    }
+                });
+            });
+
+
+
+
+
+
+
+        });
+    </script>
+
+
+</body>

@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Modify Data Demo</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../assets/libs/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../module/tag/tag.css">
+</head>
+
+<body>
+
+    <form class="layui-form" lay-filter="example" id="uploadForm11" enctype="multipart/form-data" method="post">
+
+        <div class="layui-form-item" style="margin-top: 20px">
+            <label class="layui-form-label">goods No:</label>
+            <div class="layui-input-block" style="margin-right: 20px">
+                <input type="text" name="id" readonly="true" autocomplete="off" placeholder="" id="id"
+                    class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">goods name</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" id="name" lay-verify="required" lay-reqtext="goods name is required and cannot be blank"
+                       placeholder="Please enter the goods name" autocomplete="off" class="layui-input" style="width: 300px">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">Hand price</label>
+            <div class="layui-input-block">
+                <input type="text" name="porice" id="porice" lay-verify="required" placeholder="Hand price" autocomplete="off"
+                    class="layui-input" style="width: 300px">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">Hand price</label>
+            <div class="layui-input-block">
+                <input type="text" name="stock" id="stock" lay-verify="required" placeholder="Product inventory20" autocomplete="off"
+                       class="layui-input" style="width: 300px">
+            </div>
+        </div>
+
+        <div class="layui-upload layui-form-item">
+            <label class="layui-form-label"></label>
+            <button type="button" class="layui-btn" id="uploadBtn">Select a picture</button>
+            <div class="layui-input-block">
+                <div class="layui-upload-list previewBox" id="previewBox">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">goods introduction</label>
+            <div class="layui-input-block">
+                <textarea name="info" id="info" required lay-verify="required" placeholder="input"
+                    class="layui-textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="text-align: center">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" id="doSave" lay-submit="" lay-filter="demo1">update</button>
+            </div>
+        </div>
+    </form>
+    <style>
+        .layui-upload-list {
+            padding: 10px 20px;
+            display: flex;
+            min-height: 150px;
+            min-width: 150px;
+            border: 1px solid #cccccc;
+            /* margin: 10px 50px; */
+        }
+
+        .previewBox {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .imgitem {
+            cursor: pointer;
+            background-color: #FF5722;
+            width: 100%;
+            text-align: center;
+        }
+
+        .imgBox {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 5px 20px;
+        }
+    </style>
+
+    <script src="../../assets/libs/layui/layui.js" charset="utf-8"></script>
+    <script src="../js/util.js" charset="utf-8"></script>
+    <script>
+        layui.config({
+            base: '/module/'
+        }).use(['jquery', 'layer', 'table', 'form', 'config', 'upload'], function () {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form;
+            var upload = layui.upload;
+            var config = layui.config;
+            var imgUrl = ''
+            var files = [];
+            var req = GetRequest();
+            var no = req['editNo'];//Gets the value of the requested url parameter editNo 获取请求的url参数editNo的值
+
+            upload.render({
+                elem: '#uploadBtn'
+                , multiple: true
+                , bindAction: "#save"
+                , auto: false
+                , choose: (obj) => {//Preview the picture 预览图片
+                    files = obj.pushFile();
+                    obj.preview((index, file, result) => {
+                        imgUrl = result
+                        $('#previewBox').append('<div class="imgBox" ><img src="' + result + '" alt="' + file.name + '" class="layui-upload-img" width="100" height="100"><a class="remove_f' + index + ' imgitem">cancel</a></div>')
+                        $('.remove_f' + index).bind('click', function () {
+                            delete files[index];//Deletes the specified picture 删除指定图片
+                            $(this).parent().remove();
+                        })
+                    });
+                }
+            });
+            if (no) {
+                $.ajax({
+                    url: config.base_server + 'GetGoodsById?editNo=' + no,
+                    dataType: 'json',
+                    type: 'get',
+                    success: function (data) {
+                        data = data.data;
+                        if (!data.length) {
+                            return;
+                        }
+
+                        $('#id').val(data[0].id);
+                        $('#name').val(data[0].name);
+                        $('#porice').val(data[0].porice);
+                        $('#stock').val(data[0].stock);
+                        $('#info').val(data[0].info);
+                        srcArr = data[0].urlList;
+                        srcArr.forEach((item, index) => {
+                            $('#previewBox').append('<div class="imgBox" ><img src="' + item + '" alt="" class="layui-upload-img" width="100" height="100"><a class="remove_' + index + ' imgitem">cancel</a></div>');
+                            $('.remove_' + index).bind('click', function () {
+                                let itemIndex = $(this).parent().parent().find('.imgBox').index($(this).parent()[0]);
+                                srcArr.splice(itemIndex, 1);
+                                $(this).parent().remove();
+                            })
+                        })
+
+                    }
+
+                })
+            }
+
+            //Save user data 保存用户数据
+            form.on('submit(demo1)', function (info) {
+                var data = form.val('example');
+                var name = data.name;
+                var id = data.id
+                var porice = data.porice;
+                var stock = data.stock;
+                var info = data.info;
+                var formData = new FormData();
+                formData.append('name', name);
+                formData.append('porice', porice);
+                formData.append('stock', stock);
+                formData.append('info', info);
+                formData.append('id', id);
+                for (var i = 0; i < Object.values(files).length; i++) {
+                    formData.append('url', Object.values(files)[i]);
+                }
+                formData.append("urlList", JSON.stringify(srcArr));
+                layer.load(2);
+                $.ajax({
+                    type: "POST",
+                    url: config.base_server + "UpdateGoods",
+                    data: formData,
+                    async: false,
+                    processData: false,   //Tell jQuery not to process the data sent  告诉jquery不要处理发送的数据
+                    contentType: false,
+                    success: function (data) {
+                        console.log("修改返回")
+                        if (data.code == 1) {
+                            var index = parent.layer.getFrameIndex(window.name); //First get the index of the current iframe layer 先得到当前iframe层的索引 
+                            parent.layer.close(index); //Perform the shutdown again 再执行关闭 
+                        }
+                    }
+
+                });
+
+
+            })
+        });
+    </script>
+
+
+</body>

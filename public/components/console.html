@@ -1,0 +1,149 @@
+<div class="layui-row layui-col-space15">
+    <div class="layui-col-xs6 layui-col-md3">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                Number of management <span class="layui-badge layui-bg-blue pull-right"> sum</span>
+            </div>
+            <div class="layui-card-body">
+                <p class="lay-big-font" id="adminNum">0</p>
+                <p style="text-align: right;"><i class="layui-icon layui-icon-flag"></i></span></p>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs6 layui-col-md3">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                Number of goods operations <span class="layui-badge layui-bg-black pull-right"> sum</span>
+            </div>
+            <div class="layui-card-body">
+                <p class="lay-big-font" id="goodsNum">0</p>
+                <p style="text-align: right;"><i class="layui-icon layui-icon layui-icon-rate"></i></span></p>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs6 layui-col-md3">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                Number of orders <span class="layui-badge layui-bg-green pull-right"> sum</span>
+            </div>
+            <div class="layui-card-body">
+                <p class="lay-big-font" id="cardtNum">0</p>
+                <p style="text-align: right;"><i class="layui-icon layui-icon-read"></i></span></p>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs6 layui-col-md3">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                Active Users <span class="layui-badge layui-bg-orange pull-right"> sum</span>
+            </div>
+            <div class="layui-card-body">
+                <p class="lay-big-font" id="userNum">0</p>
+                <p style="text-align: right;"><i class="layui-icon layui-icon-user"></i></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="layui-row layui-col-space15">
+    <div>
+        <div>
+            <div class="layui-fluid">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-sm12 layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header">New users in the latest week</div>
+                            <div class="layui-card-body" style="min-height: 280px;">
+                                <div id="main1" class="layui-col-sm12" style="height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<style>
+    .card {
+        width: 100%;
+    }
+</style>
+<script>
+    layui.use(['carousel', 'element', 'jquery', 'admin'], function () {
+        var carousel = layui.carousel;
+        var element = layui.element;
+        var $ = layui.jquery;
+        var admin = layui.admin;
+        layui.link('assets/css/console.css');
+        $(function () {
+            admin.myAjax({
+                url: "getIndexCount",
+                success: function (res) {
+                    if (res.code) {
+                        let data = res;
+                        if (data.code) {
+                            $('#adminNum').text(data.adminNum)
+                            $('#goodsNum').text(data.goodsNum)
+                            $('#cardtNum').text(data.cardtNum)
+                            $('#userNum').text(data.userNum)
+                        }
+                    }
+                }
+            })
+
+            // 基于准备好的dom，初始化echarts实例
+            var main1 = echarts.init(document.getElementById('main1'));
+            // 指定图表的配置项和数据
+            var option = {
+                grid: {
+                    top: '5%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: 'Number of users',
+                    data: [0, 0, 0, 0, 0, 0, 0],
+                    type: 'line'
+                }]
+            };
+
+            // 使用刚指定的配置项和数据显示图表。
+            main1.setOption(option);
+
+            admin.myAjax({
+                url: "getuserNumTable",
+                success: function (res) {
+                    main1.hideLoading();
+                    if (res.code) {
+                        let data = res;
+                        main1.setOption({
+                            series: [
+                                {
+                                    name: 'Number of users',
+                                    data: data.userNum,
+                                    type: 'line'
+                                }
+                            ]
+                        })
+                    }
+                }
+            })
+
+        })
+    });
+
+</script>

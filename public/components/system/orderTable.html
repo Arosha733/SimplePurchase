@@ -1,0 +1,150 @@
+<body>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>Advanced Query</legend>
+    </fieldset>
+
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">goods name:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" id="name" autocomplete="off" class="layui-input" placeholder="input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" id="orderDoSearch">query</button>
+                <button type="reset" class="layui-btn layui-btn-primary" id="doReset">reset</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="layui-hide" id="cardTableId" lay-filter="caedTable"></table>
+   
+    <div style="display: none" id="userbarDemo" type="text/html">
+        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">delete</a>
+        {{# if(d.orderState == 0){ }}
+        <a class="layui-btn layui-btn-sm" lay-event="deliver">deliver goods</a>
+        {{# } }}
+    </div>
+
+    <script>
+        layui.use(['jquery', 'layer', 'table', 'form', 'config'], function () {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var table = layui.table;
+            var form = layui.form;
+            var config = layui.config;
+            form.render();
+            //Table rendering 表格渲染
+            table.render({
+                elem: '#cardTableId',
+                id: 'card'
+                , url: config.base_server + 'getCardList'
+                , cellMinWidth: 80
+                , cols: [[
+                    { type: 'checkbox', fixed: 'left' }
+                    , { field: 'id', title: 'Order No', sort: true, minWidth: 100 }
+                    , { field: 'username', title: 'User Name', minWidth: 100 }
+                    , {
+                        field: 'orderState', title: 'Order Status', minWidth: 100, templet: function (d) {
+                            let str = "Unshipped"
+                            if (d.orderState == 0) {
+                                str = "Unshipped"
+                            } else if (d.orderState == 1) {
+                                str = "Shipped"
+                            } else if (d.orderState == 2) {
+                                str = "Goods received"
+                            } else if (d.orderState == 3) {
+                                str = "return goods"
+                            }
+                            return str
+                        }
+                    }
+                    , { field: 'sum', title: 'goods price', minWidth: 100 }
+                    , {
+                        field: 'comm', title: 'goods price', minWidth: 100,
+                        templet: function (d) {
+                            let str = d.comm.reduce(function (prev, cur, index, arr) {
+                                if (index == 0) {
+                                    return cur.name + ":" + cur.number
+                                }
+                                return prev + "--" + cur.name + ":" + cur.number
+                            }, '')
+                            return str
+                        }
+                    }
+                    , { title: 'operation', toolbar: '#userbarDemo' }
+                ]]
+                , page: true //Turn on pagination 开启分页
+                , skin: 'row' //Line border style 行边框风格
+                , even: true //Turn on interlaced backgrounds 开启隔行背景
+                , size: 'lg' //Small size table 小尺寸的表格
+            });
+
+            //Listening for inline button events 行内按钮事件的监听
+            table.on('tool(caedTable)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'del') {
+                    var editId = data.id;
+                    layer.confirm('Are you sure to delete this order?', function (index) {
+                        $.ajax({
+                            type: "GET",
+                            url: config.base_server + "DeleteCardById",
+                            data: { id: editId },
+                            dataType: "json",
+                            success: (data) => {
+                                if (data.code) {
+                                    obj.del();
+                                    // table.reload('card');
+                                    layer.msg('Deletion succeeded', {
+                                        icon: 1
+                                    });
+                                    layer.close(index);
+                                } else {
+                                    alert(data.info);
+                                }
+                            }
+                        });
+                    });
+                } else if (obj.event === 'deliver') {
+                    var editId = data.id;
+                    layer.confirm('Do you want to ship this order?', function (index) {
+                        $.ajax({
+                            type: "GET",
+                            url: config.base_server + "DeliverCardById",
+                            data: { id: editId },
+                            dataType: "json",
+                            success: (data) => {
+                                if (data.code) {
+                                    table.reload('card');
+                                    layer.msg('Shipment succeeded', {
+                                        icon: 1
+                                    });
+                                } else {
+                                    alert(data.info);
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+
+            $('#orderDoSearch').on('click', function () {
+                var name = $("input[name='name']").val();
+                table.reload('card', {
+                    url: config.base_server + 'getCardList' //Data interface 数据接口
+                    , where: { name: name }
+                });
+            });
+
+         
+            $('#doReset').on('click', function () {
+                location.reload();
+            });
+        });
+
+    </script>
+
+</body>

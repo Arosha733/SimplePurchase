@@ -1,0 +1,67 @@
+<link rel="stylesheet" href="../../assets/libs/layui/css/layui.css" media="all">
+<form class="layui-form" lay-filter="example">
+    <div class="layui-form-item" style="margin-top: 20px">
+        <label class="layui-form-label">User No:</label>
+        <div class="layui-input-block" style="margin-right: 20px">
+            <input disabled type="text" name="userId" disabled="true" autocomplete="off" placeholder="" id="userId"
+                class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item" style="margin-top: 20px">
+        <label class="layui-form-label">User Name:</label>
+        <div class="layui-input-block" style="margin-right: 20px">
+            <input disabled type="text" name="userName" lay-verify="title" autocomplete="off" placeholder=""
+                disabled="true" id="userName" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">User points:</label>
+        <div class="layui-input-block" style="margin-right: 20px">
+            <input disabled type="text" name="userPoints" lay-verify="required" lay-reqtext="User gender cannot be blank
+                    " placeholder="" disabled="true" id="userPoints" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+</form>
+
+
+<script src="../../assets/libs/layui/layui.js" charset="utf-8"></script>
+<script src="../js/util.js" charset="utf-8"></script>
+<script>
+
+    layui.config({
+        base: '/module/'
+    }).use(['jquery', 'layer', 'table', 'form', 'config'], function () {
+
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var config = layui.config;
+        var req = GetRequest();
+
+        var no = req['editNo'];//Gets the value of the requested url parameter editNo 获取请求的url参数editNo的值
+        //Gets the currently edited data 获取当前编辑的数据
+        $.ajax({
+            url: config.base_server + 'GetUsersById?editNo=' + no,
+            dataType: 'json',
+            type: 'get',
+            success: function (data) {
+
+                data = data.data;
+                $('#userId').val(data[0].userId);
+                $('#userName').val(data[0].userName);
+                $('#userUrl').attr('src', data[0].userUrl ? data[0].userUrl : '');
+                $('#userSex').val(data[0].userSex);
+                $('#beginMoney').val(data[0].beginMoney);
+            }
+        })
+
+        $('.userUrl').on('error', function () {
+            this.style.display = "none";
+        })
+
+
+    });
+</script>

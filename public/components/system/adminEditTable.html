@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Modify Data Demo</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../assets/libs/layui/css/layui.css" media="all">
+</head>
+
+<body>
+
+    <form class="layui-form" lay-filter="example" id="uploadForm11" enctype="multipart/form-data" method="post">
+
+        <div class="layui-form-item" style="margin-top: 20px">
+            <label class="layui-form-label">Administrator No:</label>
+            <div class="layui-input-block" style="margin-right: 20px">
+                <input type="text" name="id" readonly="true" autocomplete="off" placeholder="" id="id"
+                    class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="margin-top: 20px">
+            <label class="layui-form-label">Administrator Name:</label>
+            <div class="layui-input-block" style="margin-right: 20px">
+                <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="" id="name"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">Administrator Password:</label>
+            <div class="layui-input-block" style="margin-right: 20px">
+                <input type="text" name="password" lay-verify="required" lay-reqtext="User contact information cannot be blank?
+                " placeholder="" id="password" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 20px">
+            <label class="layui-form-label">Administrator avatar:</label>
+            <div class="layui-input-block" style="margin-right: 20px">
+                <input type="file" name="url" lay-verify="title" autocomplete="off" id="url" style="opacity: 0;" hidden>
+                <img alt="" srcset="" id="urlShow" name="urlShow" width="100" height="100">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">sex:</label>
+            <div class="layui-input-block" style="margin-right: 20px">
+                <select name="sex" id='sex' lay-filter="sex">
+                    <option value="man">man</option>
+                    <option value="woman">woman</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="text-align: center">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" id="doSave" lay-submit="" lay-filter="demo1">update</button>
+                <button type="button" class="layui-btn layui-btn-primary">return</button>
+            </div>
+        </div>
+    </form>
+
+
+    <script src="../../assets/libs/layui/layui.js" charset="utf-8"></script>
+    <script src="../js/util.js" charset="utf-8"></script>
+    <script>
+
+
+
+        layui.config({
+            base: '/module/'
+        }).use(['jquery', 'layer', 'table', 'form', 'config'], function () {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form;
+            var config = layui.config;
+
+            var req = GetRequest();
+
+            var no = req['editNo'];//获取请求的url参数editNo的值
+            //获取当前编辑的数据
+            if (no) {
+                $.ajax({
+                    url: config.base_server + 'GetAdminById?editNo=' + no,
+                    dataType: 'json',
+                    type: 'get',
+                    success: function (data) {
+                        data = data.data;
+                        if (!data.length) {
+                            return;
+                        }
+                        $('#id').val(data[0].id);
+                        $('#name').val(data[0].name);
+                        $('#password').val(data[0].password);
+                        $('#urlShow').attr('src', data[0].url);
+                        var select = 'dd[lay-value=' + data[0].sex + ']';
+                        $('#sex').siblings("div.layui-form-select").find('dl').find(select).click();
+                    }
+
+                })
+            }
+
+            $('#urlShow').on('click', function () {
+                $('#url').trigger("click");
+            })
+
+            //Save user data 保存用户数据
+            form.on('submit(demo1)', function (info) {
+                var data = form.val('example');
+                var id = data.id;
+                var name = data.name;
+                var password = data.password;
+                var url = data.url;
+                var sex = data.sex;
+                let fromData = new FormData();
+                fromData.append('id', id);
+                fromData.append('name', name);
+                fromData.append('password', password);
+                fromData.append('url', $('#url')[0].files[0])
+                fromData.append('sex', sex);
+                layer.load(2);
+                $.ajax({
+                    type: "POST",
+                    url: config.base_server + "UpdateAdminById",
+                    data: new FormData(info.form),
+                    async: false,
+                    processData: false,   //Tell jQuery not to process the data sent  告诉jquery不要处理发送的数据
+                    contentType: false,
+                    success: function (data) {
+                        if (data.code == 1) {
+                            var index = parent.layer.getFrameIndex(window.name); 
+                            parent.layer.close(index); 
+                        }
+                    }
+
+                });
+            })
+
+            function checkPic(upload) {
+                var valid = $(upload).attr('id');
+                var picPath = document.getElementById(valid).value;
+                var type = picPath.substring(picPath.lastIndexOf(".") + 1, picPath.length).toLowerCase();
+                if (type !== "jpg" && type !== "bmp" && type !== "gif" && type !== "png") {
+                    alert("Please upload the correct image format");
+                    return false;
+                }
+                return true;
+            }
+            function getObjectURL(file) {
+                var url = null;
+                if (window.createObjectURL != undefined) {
+                    url = window.createObjectURL(file);
+                } else if (window.URL != undefined) {
+                    url = window.URL.createObjectURL(file);
+                } else if (window.webkitURL != undefined) {
+                    url = window.webkitURL.createObjectURL(file);
+                }
+                return url;
+            }
+
+            function PreviewImage(upload, width, height) {
+                if (checkPic(upload)) {
+                    try {
+                        var imgPath = getObjectURL(upload.files[0]);
+                        console.log(JSON.stringify(imgPath))
+                        $('#urlShow').attr('src', imgPath);
+
+                    } catch (e) {
+                        alert("Cannot preview picture");
+                    }
+                }
+            }
+            $('#url').on('change', function (e) {
+                PreviewImage(this, 100, 100);
+            })
+
+        });
+    </script>
+
+
+</body>

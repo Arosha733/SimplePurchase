@@ -1,0 +1,65 @@
+<body>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>Rotation chart management</legend>
+    </fieldset>
+    <div class="layui-tab layui-tab-card">
+        <div class="layui-form" style="padding: 20px 0 0 0;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">Image upload</label>
+                <div class="layui-input-inline">
+                    <div class="layui-upload-list layui-icon" id="addZmImg">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <ul id="imgZmList"></ul>
+            </div>
+        </div>
+    </div>
+    <div id="cropperdiv"></div>
+    <script>
+        layui.use(['form', 'upload', 'config','jquery'], function () {
+            var config = layui.config
+            var $ = layui.jquery;
+            var form = layui.form
+                , $ = layui.jquery
+                , upload = layui.upload
+                , config = layui.config;
+            $.ajax({
+                url: config.base_server + 'getSwiperList',
+                dataType: 'json',
+                type: 'get',
+                async: false,
+                success: function (res) {
+                    let list = res.data;
+                    list.forEach(item => {
+                        let result = item.swiperurl
+                        let swiperId = item.swiperId
+                        $('#imgZmList').append('<li style="position:relative"><img name="imgZmList" src="' + result + '"width="150" height="113" swiperId="' + swiperId + '"><div class="img_edit layui-icon" onclick="croppers_pic(this)">&#xe642;</div><div class="img_close" onclick="deleteElement(this)">X</div></li>');
+                    })
+                    form.render();
+                    imgMove("imgZmList");
+                }
+            })
+            upload.render({
+                elem: '#addZmImg'
+                , url: config.base_server + 'uploadSwiperImg'
+                , multiple: true
+                , before: function (obj) {
+                    console.log(obj)
+                    obj.preview(function (index, file, result) {
+
+                    });
+                }
+                , done: function (res) {
+                    let result = res.url
+                    let swiperId = res.swiperId
+                    $('#imgZmList').append('<li style="position:relative"><img name="imgZmList" src="' + result + '"width="150" height="113" swiperId="' + swiperId + '"><div class="img_edit layui-icon" onclick="croppers_pic(this)">&#xe642;</div><div class="img_close" onclick="deleteElement(this)">X</div></li>');
+                    form.render();
+                    imgMove("imgZmList");
+                }
+            });
+        });
+    </script>
+</body>

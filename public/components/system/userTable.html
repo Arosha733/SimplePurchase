@@ -1,0 +1,146 @@
+<body>
+    <!-- Advanced query for column headers 列表头高级查询 -->
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>User query</legend>
+    </fieldset>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">User No:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="userId" id="userId" autocomplete="off" class="layui-input"
+                        placeholder="input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">User Name:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="userName" id="userName" autocomplete="off" class="layui-input"
+                        placeholder="input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" id="doSearch" lay-filter="demo1">query</button>
+                <button type="reset" class="layui-btn layui-btn-primary" id="doReset">reset</button>
+            </div>
+        </div>
+    </form>
+
+
+    <div class="layui-btn-group demoTable">
+        <button class="layui-btn" data-type="refresh" id="refreshUserBtn">Refresh</button>
+    </div>
+
+
+
+    <table class="layui-hide" id="userTableId" lay-filter="userTable"></table>
+    <!-- button 按钮 -->
+    <div style="display: none" id="userbarDemo" type="text/html">
+        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">delete</a>
+    </div>
+
+
+
+    <script>
+        layui.use(['jquery', 'layer', 'table', 'form', 'config', 'element'], function () {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var table = layui.table;
+            var form = layui.form;
+            var config = layui.config;
+            console.log(config.base_server+'getUserList')
+            layui.element.init();
+            form.render();
+            //Table rendering 表格渲染
+            table.render({
+                elem: '#userTableId',
+                id: 'user'
+                , url: config.base_server + 'getUserList'
+                , cellMinWidth: 80
+                , cols: [[
+                    { type: 'checkbox', fixed: 'left' }
+                    , { field: 'userId', title: 'User No', sort: true, minWidth: 100 }
+                    , { field: 'username', title: 'User Name', minWidth: 100 }
+                    , { field: 'email', title: 'User Email', minWidth: 100 }
+                    , { field: 'url', title: 'User avatar', minWidth: 100,
+                    templet: function (d) { return '<div ><img src=' + d.avator + ' style="width: 50px;"></div>' } }
+                    , { title: 'operation', toolbar: '#userbarDemo' }
+                ]]
+                , page: true //Turn on pagination 开启分页
+                , skin: 'row' //Line border style 行边框风格
+                , even: true //Turn on interlaced backgrounds 开启隔行背景
+                , size: 'lg' //Small size table 小尺寸的表格
+                
+            });
+            
+
+            //Listening for inline button events 行内按钮事件的监听
+            table.on('tool(userTable)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'detail') {
+                    var editId = data.userId
+                    var fu = layer.open({
+                        type: 2,
+                        title: "see" + editId + "",
+                        area: ['600px', '600px'],
+                        fix: false,
+                        content: 'components/system/userDetailTable.html?editNo=' + editId,
+
+                        maxmin: true,
+                        end: function () {
+                            table.reload('user', {
+                                url: config.base_server + 'getUserList' //Data interface 数据接口
+                                , where: {} //Set extra parameters for the asynchronous data interface 设定异步数据接口的额外参数
+                            });
+                        }
+                    });
+
+                } else if (obj.event === 'del') {
+                    var editId = data.userId;
+                    layer.confirm('Are you sure to delete this user?', function (index) {
+                        $.ajax({
+                            type: "GET",
+                            url: config.base_server + "DeleteUserById",
+                            data: { userId: editId },
+                            dataType: "json",
+                            success: (data) => {
+                                if (data.code) {
+                                    obj.del();
+                                    // table.reload('user');
+                                    layer.msg('delete success', {
+                                        icon: 1
+                                    });
+                                    layer.close(index);
+                                } else {
+                                    alert(data.info);
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+            $('#refreshUserBtn').on('click', function () {
+                location.reload();
+            });
+            // Query button 查询按钮
+            $('#doSearch').on('click', function () {
+                var userId = $("input[name='userId']").val();
+                var userName = $("input[name='userName']").val();
+                table.reload('user', {
+                    url: config.base_server + 'getUserList' //Data interface 数据接口
+                    , where: { userId: userId, userName: userName }
+                });
+
+            });
+          
+            $('#doReset').on('click', function () {
+                location.reload();
+            });
+
+        });
+
+    </script>
+
+</body>
