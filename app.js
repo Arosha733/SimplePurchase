@@ -18,11 +18,9 @@ app.use(session({
   duration: 30 * 60 * 1000,
   activeDuration: 5 * 60 * 1000
 }));
-
 app.set('views', path.join(__dirname, 'views'));
 app.engine('html', require('express-art-template'));
 app.set('view engine', 'html');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
